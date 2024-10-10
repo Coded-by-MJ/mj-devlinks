@@ -1,4 +1,4 @@
-const Error = ({ error, reset }) => {
+const Error = ({ error, reset }: { error: any; reset: () => void }) => {
   console.error(error.message);
   return (
     <section className="bg-white p-6 flex flex-col justify-start items-start min-h-screen">
