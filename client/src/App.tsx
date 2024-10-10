@@ -3,6 +3,7 @@ import {
   createRoute,
   createRootRoute,
   RouterProvider,
+  lazyRouteComponent,
 } from "@tanstack/react-router";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
@@ -47,7 +48,6 @@ const populateUserState = async (userId: string, signOut: SignOut) => {
         socialLinks: response.socialLinks,
       })
     );
-    console.log(store.getState().user);
   }
 };
 
@@ -86,13 +86,13 @@ function App() {
   const linksRoute = createRoute({
     getParentRoute: () => userRoute,
     path: "/",
-    component: () => import("@/pages/LinksPage"),
+    component: lazyRouteComponent(() => import("@/pages/LinksPage")),
   });
 
   const profileRoute = createRoute({
     getParentRoute: () => userRoute,
     path: "/profile",
-    component: () => import("@/pages/ProfilePage"),
+    component: lazyRouteComponent(() => import("@/pages/ProfilePage")),
   });
 
   const previewRoute = createRoute({
@@ -104,7 +104,7 @@ function App() {
   const shareRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/$id",
-    component: () => import("@/pages/SharePage"),
+    component: lazyRouteComponent(() => import("@/pages/SharePage")),
     loader: shareLoader,
   });
 

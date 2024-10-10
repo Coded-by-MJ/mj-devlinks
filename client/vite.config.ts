@@ -1,7 +1,6 @@
 import path from "path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   plugins: [react()],
@@ -22,22 +21,11 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      plugins: [visualizer({ open: true })],
       output: {
         manualChunks(id) {
           // Split vendor dependencies into a separate chunk
           if (id.includes("node_modules")) {
             return "vendor";
-          }
-
-          // Example: Grouping pages into their own chunks
-          if (id.includes("src/pages/")) {
-            const pageName = id
-              .split("/")
-              .pop()
-              ?.replace(".ts", "")
-              .replace(".tsx", "");
-            return `page-${pageName}`;
           }
         },
       },
