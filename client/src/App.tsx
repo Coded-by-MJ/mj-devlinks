@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-router";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { useAuth, useClerk } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 
 import { Login, Register, PreviewPage, Layout, NotFoundPage } from "./pages";
 
@@ -15,7 +15,7 @@ import Error from "./components/global/Error";
 import { getUser } from "./utils/actions";
 import { authLoader, userLoader } from "./utils/loaders";
 import { useEffect } from "react";
-import { SignOut } from "@clerk/types";
+// import { SignOut } from "@clerk/types";
 import { setUser } from "./features/user/userSlice";
 import { store } from "./store";
 import { loader as shareLoader } from "./pages/SharePage";
