@@ -28,7 +28,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const populateUserState = async (userId: string, signOut: SignOut) => {
+const populateUserState = async (userId: string) => {
   const response = await queryClient.ensureQueryData({
     queryKey: ["User"],
     queryFn: () => getUser(userId),
@@ -55,11 +55,11 @@ const populateUserState = async (userId: string, signOut: SignOut) => {
 function App() {
   const rootRoute = createRootRoute({});
   const { isSignedIn, userId } = useAuth();
-  const { signOut } = useClerk();
+  // const { signOut } = useClerk();
 
   useEffect(() => {
     if (isSignedIn && userId) {
-      populateUserState(userId, signOut);
+      populateUserState(userId);
     }
   }, [isSignedIn, userId]);
 
