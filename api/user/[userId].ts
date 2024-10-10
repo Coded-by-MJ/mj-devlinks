@@ -5,6 +5,8 @@ export default async function getUser(req: VercelRequest, res: VercelResponse) {
   if (req.method === "GET") {
     const { userId } = req.query;
 
+    console.log(userId, "i was reached");
+
     try {
       const user = await db.user.findUnique({
         where: {
