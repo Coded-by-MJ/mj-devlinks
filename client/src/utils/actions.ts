@@ -31,7 +31,7 @@ export const renderAuthError = (error: unknown): { message: string } => {
 
 export const createUser = async ({ userId, email }: CreateUserRequestBody) => {
   try {
-    await axios.post("/api/user", {
+    await axios.post(`${import.meta.env.VITE_API_URL}/user`, {
       userId,
       email,
     });
@@ -57,7 +57,9 @@ export const getUser = async (
   userId: string
 ): Promise<GetUserResponseData | { message: string }> => {
   try {
-    const res = await axios.get<GetUserResponseData>(`/api/user/${userId}`);
+    const res = await axios.get<GetUserResponseData>(
+      `${import.meta.env.VITE_API_URL}/user/${userId}`
+    );
     return res.data;
   } catch (error) {
     console.log(error);
@@ -81,11 +83,14 @@ export const updateUserProfileInfo = async (
   { firstName, lastName, image }: UpdateUserInfoRequestBody
 ) => {
   try {
-    const res = await axios.put(`/api/user/${userId}`, {
-      firstName,
-      lastName,
-      image,
-    });
+    const res = await axios.put(
+      `${import.meta.env.VITE_API_URL}/user/${userId}`,
+      {
+        firstName,
+        lastName,
+        image,
+      }
+    );
 
     toast({
       description: "Profile Updated ✅",
@@ -110,9 +115,12 @@ export const updateUserSocialLinks = async (
   { socialLinks }: UpdateSocialLinksRequestBody
 ) => {
   try {
-    const res = await axios.put(`/api/user/${userId}/social-links`, {
-      socialLinks,
-    });
+    const res = await axios.put(
+      `${import.meta.env.VITE_API_URL}/user/${userId}/social-links`,
+      {
+        socialLinks,
+      }
+    );
 
     toast({
       description: "Links Updated✅",
