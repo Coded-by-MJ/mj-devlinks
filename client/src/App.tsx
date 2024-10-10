@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-router";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 
 import {
@@ -134,52 +133,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
 
 export default App;
-
-// import { loader as homeLoader } from "./pages/HomePage";
-// import Error from "./pages/Error";
-
-// const queryClient = new QueryClient({
-//   defaultOptions: {
-//     queries: {
-//       staleTime: 1000 * 60 * 5,
-//     },
-//   },
-// });
-
-// function App() {
-//   const rootRoute = createRootRoute({
-//     component: MainLayout,
-//   });
-
-//   const homeRoute = createRoute({
-//     getParentRoute: () => rootRoute,
-//     path: "/",
-//     component: HomePage,
-//     loader: homeLoader(queryClient),
-//     errorComponent: Error,
-//     pendingComponent: PendingSkeleton,
-//   });
-
-//   const routeTree = rootRoute.addChildren([homeRoute]);
-
-//   const router = createRouter({
-//     routeTree,
-//     defaultNotFoundComponent: NotFoundPage,
-//   });
-
-//   return (
-//     <QueryClientProvider client={queryClient}>
-//       <GlobalProvider>
-//         <RouterProvider router={router} />
-//       </GlobalProvider>
-//     </QueryClientProvider>
-//   );
-// }
-
-// export default App;

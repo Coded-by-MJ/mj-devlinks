@@ -122,20 +122,17 @@ export function getProfileUrl(name: string) {
 }
 
 export const validateImageFile = async (file: File) => {
-  const maxUploadSize = 1024 * 1024; // 1 MB
-  const acceptedFileTypes = ["image/png", "image/jpeg"]; // PNG and JPG allowed
+  const maxUploadSize = 1024 * 1024;
+  const acceptedFileTypes = ["image/png", "image/jpeg"];
 
-  // File size validation
   if (file.size > maxUploadSize) {
     throw new Error("The file size must be less than 1 MB.");
   }
 
-  // File type validation
   if (!acceptedFileTypes.includes(file.type)) {
     throw new Error("The file must be a PNG or JPG format.");
   }
 
-  // Validate image dimensions
   const dimensions = await getImageDimensions(file);
   if (dimensions.width > 1024 || dimensions.height > 1024) {
     throw new Error(
