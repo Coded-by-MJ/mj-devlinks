@@ -1,13 +1,11 @@
 function DropdownOption({
   name,
   icon,
-  url,
   handleDropDown,
   handleSelectedPlatform,
 }: {
   name: string;
   icon: JSX.Element;
-  url: string;
   handleDropDown: () => void;
   handleSelectedPlatform: (platform: string) => void;
 }) {

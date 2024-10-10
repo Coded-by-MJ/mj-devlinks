@@ -1,4 +1,3 @@
-import { Button } from "../ui/button";
 import { useLocation, Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { LinkIcon, ProfileIcon } from "./Icons";
