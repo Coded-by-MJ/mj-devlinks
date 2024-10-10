@@ -104,7 +104,7 @@ function App() {
 
   const shareRoute = createRoute({
     getParentRoute: () => rootRoute,
-    path: "/$id",
+    path: "/share/$id",
     component: lazyRouteComponent(() => import("@/pages/SharePage")),
     loader: shareLoader,
   });

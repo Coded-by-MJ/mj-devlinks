@@ -35,7 +35,7 @@ export const PreviewNavbar = () => {
   const shareData = {
     title: "Devlinks",
     text: "My Devlinks Profile",
-    url: `${import.meta.env.VITE_WEBSITE_URL}/${userId}`,
+    url: `${import.meta.env.VITE_WEBSITE_URL}/share/${userId}`,
   };
 
   const handleShare = async () => {
