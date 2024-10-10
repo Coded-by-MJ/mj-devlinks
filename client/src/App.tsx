@@ -8,16 +8,7 @@ import {
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 
-import {
-  Login,
-  Register,
-  PreviewPage,
-  Layout,
-  LinksPage,
-  ProfilePage,
-  SharePage,
-  NotFoundPage,
-} from "./pages";
+import { Login, Register, PreviewPage, Layout, NotFoundPage } from "./pages";
 
 import Error from "./components/global/Error";
 import { getUser } from "./utils/actions";
@@ -95,13 +86,13 @@ function App() {
   const linksRoute = createRoute({
     getParentRoute: () => userRoute,
     path: "/",
-    component: LinksPage,
+    component: () => import("@/pages/LinksPage"),
   });
 
   const profileRoute = createRoute({
     getParentRoute: () => userRoute,
     path: "/profile",
-    component: ProfilePage,
+    component: () => import("@/pages/ProfilePage"),
   });
 
   const previewRoute = createRoute({
@@ -113,7 +104,7 @@ function App() {
   const shareRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/$id",
-    component: SharePage,
+    component: () => import("@/pages/SharePage"),
     loader: shareLoader,
   });
 
