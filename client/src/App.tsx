@@ -36,7 +36,8 @@ const populateUserState = async (userId: string, signOut: SignOut) => {
   });
 
   if ("message" in response) {
-    signOut();
+    // signOut();
+    console.log(response.message);
   } else {
     store.dispatch(
       setUser({
