@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-router";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useClerk } from "@clerk/clerk-react";
 
 import { Login, Register, PreviewPage, Layout, NotFoundPage } from "./pages";
 
@@ -15,7 +15,7 @@ import Error from "./components/global/Error";
 import { getUser } from "./utils/actions";
 import { authLoader, userLoader } from "./utils/loaders";
 import { useEffect } from "react";
-// import { SignOut } from "@clerk/types";
+import { SignOut } from "@clerk/types";
 import { setUser } from "./features/user/userSlice";
 import { store } from "./store";
 import { loader as shareLoader } from "./pages/SharePage";
@@ -28,7 +28,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const populateUserState = async (userId: string) => {
+const populateUserState = async (userId: string, signOut: SignOut) => {
   const response = await queryClient.ensureQueryData({
     queryKey: ["User"],
     queryFn: () => getUser(userId),
@@ -36,7 +36,7 @@ const populateUserState = async (userId: string) => {
   });
 
   if ("message" in response) {
-    // signOut();
+    signOut();
     console.log(response.message);
   } else {
     store.dispatch(
@@ -55,11 +55,11 @@ const populateUserState = async (userId: string) => {
 function App() {
   const rootRoute = createRootRoute({});
   const { isSignedIn, userId } = useAuth();
-  // const { signOut } = useClerk();
+  const { signOut } = useClerk();
 
   useEffect(() => {
     if (isSignedIn && userId) {
-      populateUserState(userId);
+      populateUserState(userId, signOut);
     }
   }, [isSignedIn, userId]);
 

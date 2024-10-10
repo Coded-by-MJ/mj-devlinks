@@ -7,7 +7,7 @@ import { notFound, useLoaderData } from "@tanstack/react-router";
 import { SocialLink } from "@/utils/types";
 
 function SharePage() {
-  const user = useLoaderData({ from: "/$id" });
+  const user = useLoaderData({ from: "/share/$id" });
   return (
     <section
       className={

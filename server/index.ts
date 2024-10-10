@@ -148,5 +148,4 @@ const startApp = () => {
   }
 };
 
-// startApp();
-export default startApp;
+startApp();
