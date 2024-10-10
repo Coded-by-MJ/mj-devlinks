@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import db from "./../server/utils/db";
-import type { CreateUserRequestBody } from "./../server/utils/types";
+import db from "./../../server/utils/db";
+import type { CreateUserRequestBody } from "./../../server/utils/types";
 
 export default async function createUser(
   req: VercelRequest,
