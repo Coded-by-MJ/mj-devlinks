@@ -103,7 +103,7 @@ function LoginFormContainer({
                   <Button
                     asChild
                     variant={"link"}
-                    className="text-main justify-end !m-0 font-light px-0 text-[12px]"
+                    className="text-main  !my-0 flex justify-end font-light px-0 text-[12px]"
                   >
                     <Link to="reset">Forgot your password?</Link>
                   </Button>
