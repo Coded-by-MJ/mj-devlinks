@@ -41,14 +41,29 @@ export const PreviewNavbar = () => {
   };
 
   const handleShare = async () => {
-    try {
-      await navigator.share(shareData);
-    } catch (err) {
-      const errMsg = renderError(err);
-      toast({
-        description: errMsg.message,
-        variant: "destructive",
-      });
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        const errMsg = renderError(err);
+        toast({
+          description: errMsg.message,
+          variant: "destructive",
+        });
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        toast({
+          description: "🔗Link copied to clipboard!",
+        });
+      } catch (err) {
+        const errMsg = renderError(err);
+        toast({
+          description: errMsg.message,
+          variant: "destructive",
+        });
+      }
     }
   };
 
