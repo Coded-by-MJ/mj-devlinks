@@ -64,7 +64,7 @@ function SignUpFormContainer({
                     {...field}
                     className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
                   />
-                  <FormMessage className="text-sm" />
+                  <FormMessage className="text-[12px]" />
                 </div>
               </FormControl>
             </FormItem>
@@ -99,7 +99,7 @@ function SignUpFormContainer({
                     type="password"
                     className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
                   />
-                  <FormMessage className="text-sm" />
+                  <FormMessage className="text-[12px]" />
                 </div>
               </FormControl>
             </FormItem>
@@ -137,7 +137,7 @@ function SignUpFormContainer({
                     type="password"
                     className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
                   />
-                  <FormMessage className="text-sm" />
+                  <FormMessage className="text-[12px]" />
                 </div>
               </FormControl>
               <FormDescription>

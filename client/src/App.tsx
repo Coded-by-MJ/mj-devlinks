@@ -9,7 +9,14 @@ import {
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 
-import { Login, Register, PreviewPage, Layout, NotFoundPage } from "./pages";
+import {
+  Login,
+  Register,
+  PreviewPage,
+  Layout,
+  NotFoundPage,
+  Reset,
+} from "./pages";
 
 import Error from "./components/global/Error";
 import { getUser } from "./utils/actions";
@@ -19,6 +26,10 @@ import { SignOut } from "@clerk/types";
 import { setUser } from "./features/user/userSlice";
 import { store } from "./store";
 import { loader as shareLoader } from "./pages/SharePage";
+import {
+  DisplaySkeleton,
+  PageSkeleton,
+} from "./components/global/PendingSkeleton";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -77,11 +88,19 @@ function App() {
     loader: authLoader(isSignedIn, userId),
   });
 
+  const resetRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/reset",
+    component: Reset,
+    loader: authLoader(isSignedIn, userId),
+  });
+
   const userRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/user",
     component: Layout,
     loader: userLoader(isSignedIn, userId),
+    pendingComponent: PageSkeleton,
   });
 
   const linksRoute = createRoute({
@@ -100,6 +119,7 @@ function App() {
     getParentRoute: () => userRoute,
     path: "/preview",
     component: PreviewPage,
+    pendingComponent: DisplaySkeleton,
   });
 
   const shareRoute = createRoute({
@@ -107,12 +127,14 @@ function App() {
     path: "/share/$id",
     component: lazyRouteComponent(() => import("@/pages/SharePage")),
     loader: shareLoader,
+    pendingComponent: DisplaySkeleton,
   });
 
   const routeTree = rootRoute.addChildren([
     loginRoute,
     registerRoute,
     shareRoute,
+    resetRoute,
     userRoute.addChildren([linksRoute, profileRoute, previewRoute]),
   ]);
 

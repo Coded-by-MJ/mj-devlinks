@@ -15,6 +15,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LiaSpinnerSolid } from "react-icons/lia";
+import { Link } from "@tanstack/react-router";
 
 function LoginFormContainer({
   onSubmit,
@@ -60,7 +61,7 @@ function LoginFormContainer({
                     {...field}
                     className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
                   />
-                  <FormMessage className="text-sm" />
+                  <FormMessage className="text-[12px]" />
                 </div>
               </FormControl>
             </FormItem>
@@ -81,23 +82,32 @@ function LoginFormContainer({
                 Password
               </FormLabel>
               <FormControl>
-                <div
-                  className={cn(
-                    "flex gap-3 items-center border-main-gray border w-full focus-visible:shadow-main-light focus-visible:shadow-lg focus-visible:ring-main-shade h-[48px] p-3 rounded-[8px]",
-                    form.formState.errors.password &&
-                      "border-red-500 focus-visible:shadow-red-200 focus-visible:shadow-md focus-visible:ring-red-200"
-                  )}
-                >
-                  <LockIcon />
+                <>
+                  <div
+                    className={cn(
+                      "flex gap-3 items-center border-main-gray border w-full focus-visible:shadow-main-light focus-visible:shadow-lg focus-visible:ring-main-shade h-[48px] p-3 rounded-[8px]",
+                      form.formState.errors.password &&
+                        "border-red-500 focus-visible:shadow-red-200 focus-visible:shadow-md focus-visible:ring-red-200"
+                    )}
+                  >
+                    <LockIcon />
 
-                  <input
-                    placeholder="Enter your password"
-                    {...field}
-                    type="password"
-                    className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
-                  />
-                  <FormMessage className="text-sm" />
-                </div>
+                    <input
+                      placeholder="Enter your password"
+                      {...field}
+                      type="password"
+                      className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
+                    />
+                    <FormMessage className="text-[12px]" />
+                  </div>
+                  <Button
+                    asChild
+                    variant={"link"}
+                    className="text-main w-full justify-end !m-0 font-light px-0 text-[12px]"
+                  >
+                    <Link to="reset">Forgot your password?</Link>
+                  </Button>
+                </>
               </FormControl>
             </FormItem>
           )}

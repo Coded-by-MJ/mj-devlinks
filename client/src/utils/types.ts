@@ -1,7 +1,10 @@
 export type AuthFormProps = {
   heading: string;
   desc: string;
-  type: string;
+  type: "login" | "reset" | "register";
+  link: string;
+  linkText: string;
+  suggestion?: string;
 };
 
 export type SocialLink = {

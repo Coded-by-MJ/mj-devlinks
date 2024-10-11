@@ -10,17 +10,21 @@ import { renderAuthError } from "@/utils/actions";
 import { toast } from "@/hooks/use-toast";
 import VerifyOTPForm from "@/components/auth/VerifyOTPForm";
 import { useCreateUser } from "@/hooks/react-query-hooks";
+import { AuthFormProps } from "@/utils/types";
 
-const authFormProps = {
+const authFormProps: AuthFormProps = {
   heading: "Create account",
   desc: "Let’s get you started sharing your links!",
   type: "register",
+  link: "/",
+  linkText: "Login",
+  suggestion: "Already have an account?",
 };
 
 function Register() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [verifyOTP, setVerifyOTP] = useState(false);
-  const { createAuthUser } = useCreateUser();
+  const { createAuthUser, isPending } = useCreateUser();
 
   const handleSignUp = async (values: z.infer<typeof registerFormSchema>) => {
     if (!isLoaded) return;
@@ -77,7 +81,7 @@ function Register() {
   if (verifyOTP) {
     return (
       <SectionWrapper className="flex justify-center gap-[51px] flex-col items-center">
-        <VerifyOTPForm onSubmit={handleVerifyOTP} />
+        <VerifyOTPForm isPending={isPending} onSubmit={handleVerifyOTP} />
       </SectionWrapper>
     );
   }

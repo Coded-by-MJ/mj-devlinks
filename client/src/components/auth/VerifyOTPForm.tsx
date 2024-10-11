@@ -20,15 +20,16 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useCreateUser } from "@/hooks/react-query-hooks";
+
 import { LiaSpinnerSolid } from "react-icons/lia";
 
 function VerifyOTPForm({
   onSubmit,
+  isPending,
 }: {
   onSubmit(data: z.infer<typeof otpFormSchema>): Promise<void>;
+  isPending: boolean;
 }) {
-  const { isPending } = useCreateUser();
   const form = useForm<z.infer<typeof otpFormSchema>>({
     resolver: zodResolver(otpFormSchema),
     defaultValues: {

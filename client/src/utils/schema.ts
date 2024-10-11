@@ -40,3 +40,15 @@ export const userFormSchema = z.object({
     message: "Invalid email address",
   }),
 });
+
+export const emailSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+});
+export const resetSchema = z.object({
+  password: z.string().min(8, {
+    message: "Please check again",
+  }),
+  pin: z.string().min(6, {
+    message: "Your one-time password must be 6 characters.",
+  }),
+});

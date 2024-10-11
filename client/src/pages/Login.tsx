@@ -8,11 +8,15 @@ import { toast } from "@/hooks/use-toast";
 import { renderAuthError } from "@/utils/actions";
 import { useSignIn } from "@clerk/clerk-react";
 import { useNavigate } from "@tanstack/react-router";
+import { AuthFormProps } from "@/utils/types";
 
-const authFormProps = {
+const authFormProps: AuthFormProps = {
   heading: "Login",
   desc: "Add your details below to get back into the app",
   type: "login",
+  link: "/register",
+  linkText: "Create account",
+  suggestion: "Don’t have an account?",
 };
 
 function Login() {
