@@ -12,7 +12,7 @@ function SectionWrapper({
   return (
     <section
       className={cn(
-        "mx-auto relative  bg-[#EEEEEE]  min-h-screen  max-w-[85rem] p-0 md:p-6",
+        "mx-auto relative  bg-[#EEEEEE]  min-h-screen  max-w-[90rem] p-0 md:p-6",
         className,
         isPreview &&
           "before:absolute before:w-full bg-white before:h-[360px] before:rounded-b-[32px] before:bg-main before:top-0 before:left-0"
