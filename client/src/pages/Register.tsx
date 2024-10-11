@@ -24,7 +24,7 @@ const authFormProps: AuthFormProps = {
 function Register() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [verifyOTP, setVerifyOTP] = useState(false);
-  const { createAuthUser, isPending } = useCreateUser();
+  const { createAuthUser } = useCreateUser();
 
   const handleSignUp = async (values: z.infer<typeof registerFormSchema>) => {
     if (!isLoaded) return;
@@ -81,7 +81,7 @@ function Register() {
   if (verifyOTP) {
     return (
       <SectionWrapper className="flex justify-center gap-[51px] flex-col items-center">
-        <VerifyOTPForm isPending={isPending} onSubmit={handleVerifyOTP} />
+        <VerifyOTPForm onSubmit={handleVerifyOTP} />
       </SectionWrapper>
     );
   }

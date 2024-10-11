@@ -22,13 +22,12 @@ import {
 } from "@/components/ui/input-otp";
 
 import { LiaSpinnerSolid } from "react-icons/lia";
+import { useCreateUser } from "@/hooks/react-query-hooks";
 
 function VerifyOTPForm({
   onSubmit,
-  isPending,
 }: {
   onSubmit(data: z.infer<typeof otpFormSchema>): Promise<void>;
-  isPending: boolean;
 }) {
   const form = useForm<z.infer<typeof otpFormSchema>>({
     resolver: zodResolver(otpFormSchema),
@@ -36,6 +35,7 @@ function VerifyOTPForm({
       pin: "",
     },
   });
+  const { isPending } = useCreateUser();
 
   return (
     <Card className="w-[350px] p-4 shadow-none rounded-xl gap-5 flex flex-col items-center">
