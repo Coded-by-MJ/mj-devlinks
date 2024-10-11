@@ -6,6 +6,7 @@ import { IoMdEye } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { renderError } from "@/utils/actions";
 import { toast } from "@/hooks/use-toast";
+import { useAppSelector } from "@/hooks/redux-hooks";
 
 function Navbar() {
   return (
@@ -31,10 +32,11 @@ export const PreviewNavbar = () => {
   const { userId } = useLoaderData({
     from: "/user",
   });
+  const user = useAppSelector((store) => store.user);
 
   const shareData = {
     title: "Devlinks",
-    text: "My Devlinks Profile",
+    text: `${user.firstName}'s Devlinks Profile`,
     url: `${import.meta.env.VITE_WEBSITE_URL}/share/${userId}`,
   };
 
