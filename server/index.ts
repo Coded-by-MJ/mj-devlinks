@@ -17,8 +17,10 @@ const port = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
-
-app.use(cors());
+const corsOptions = {
+  origin: "https://mj-devlinks.vercel.app",
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // app.get("/", (req, res) => {
