@@ -18,6 +18,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 const corsOptions = {
+  // origin: "http://localhost:3000",
   origin: "https://mj-devlinks.vercel.app",
 };
 app.use(cors(corsOptions));
