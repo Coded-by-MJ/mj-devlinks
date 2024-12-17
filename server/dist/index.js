@@ -14,11 +14,14 @@ const port = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== "production") {
     app.use((0, morgan_1.default)("dev"));
 }
-app.use((0, cors_1.default)());
+const corsOptions = {
+    origin: "https://mj-devlinks.vercel.app",
+};
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
-app.get("/", (req, res) => {
-    res.send("<h1>Hello From Server...</h1>");
-});
+// app.get("/", (req, res) => {
+//   res.send("<h1>Hello From Server...</h1>");
+// });
 //Create Actions
 app.post("/user", async (req, res) => {
     const { userId, email } = req.body;
@@ -56,7 +59,8 @@ app.get("/user/:userId", async (req, res) => {
         }
     }
     catch (error) {
-        res.status(500).json({ error: "Failed to retrieve user" });
+        console.log(error);
+        res.status(500).json({ error: "Failed to retrieve", test: error });
     }
 });
 // Update Actions

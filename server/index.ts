@@ -43,7 +43,9 @@ app.post(
       res.status(201).json(user);
     } catch (error) {
       console.error("Error creating user:", error);
-      res.status(500).json({ error: "Failed to create user" });
+      res
+        .status(500)
+        .json({ error: "Failed to create user", serverError: error });
     }
   }
 );
@@ -71,7 +73,10 @@ app.get(
         res.status(404).json({ error: "User not found" });
       }
     } catch (error) {
-      res.status(500).json({ error: "Failed to retrieve user" });
+      console.log(error);
+      res
+        .status(500)
+        .json({ error: "Failed to retrieve user", serverError: error });
     }
   }
 );
@@ -99,7 +104,10 @@ app.put(
       });
       res.status(200).json(user);
     } catch (error) {
-      res.status(500).json({ error: "Failed to update user" });
+      console.log(error);
+      res
+        .status(500)
+        .json({ error: "Failed to update user", serverError: error });
     }
   }
 );
@@ -130,7 +138,10 @@ app.put(
 
       res.status(200).json(createdLinks);
     } catch (error) {
-      res.status(500).json({ error: "Failed to update social links" });
+      console.log(error);
+      res
+        .status(500)
+        .json({ error: "Failed to update social links", serverError: error });
     }
   }
 );

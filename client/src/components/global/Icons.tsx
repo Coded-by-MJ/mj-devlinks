@@ -82,5 +82,3 @@ export const LinkLine = () => {
     </svg>
   );
 };
-
-export const GitHubLogoIcon = () => {};

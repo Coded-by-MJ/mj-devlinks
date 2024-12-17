@@ -16,7 +16,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
+import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
 import { EmailIcon, LockIcon } from "@/components/global/Icons";
 
 function SignUpFormContainer({
@@ -24,6 +26,8 @@ function SignUpFormContainer({
 }: {
   onSubmit(values: z.infer<typeof registerFormSchema>): Promise<void>;
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -32,6 +36,9 @@ function SignUpFormContainer({
       confirmPassword: "",
     },
   });
+  const handleChangePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   return (
     <Form {...form}>
@@ -84,23 +91,40 @@ function SignUpFormContainer({
                 Create Password
               </FormLabel>
               <FormControl>
-                <div
-                  className={cn(
-                    "flex gap-3 items-center border-main-gray border w-full focus-visible:shadow-main-light focus-visible:shadow-lg focus-visible:ring-main-shade h-[48px] p-3 rounded-[8px]",
-                    form.formState.errors.password &&
-                      "border-red-500 focus-visible:shadow-red-200 focus-visible:shadow-md focus-visible:ring-red-200"
-                  )}
-                >
-                  <LockIcon />
-
-                  <input
-                    placeholder="At least 8 characters"
-                    {...field}
-                    type="password"
-                    className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
-                  />
+                <>
+                  <div
+                    className={cn(
+                      "flex gap-3 items-center justify-between border-main-gray border w-full focus-visible:shadow-main-light focus-visible:shadow-lg focus-visible:ring-main-shade h-[48px] p-3 rounded-[8px]",
+                      form.formState.errors.password &&
+                        "border-red-500 focus-visible:shadow-red-200 focus-visible:shadow-md focus-visible:ring-red-200"
+                    )}
+                  >
+                    <div className="flex gap-3 items-center flex-grow">
+                      <LockIcon />
+                      <input
+                        placeholder="At least 8 characters"
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
+                      />
+                    </div>
+                    <button
+                      onClick={handleChangePassword}
+                      className="grid cursor-pointer grid-cols-1 grid-rows-1 justify-center items-center px-1"
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash
+                          className={"col-span-full row-span-1 text-[#737373]"}
+                        />
+                      ) : (
+                        <EyeOpenIcon
+                          className={"col-span-full row-span-1 text-[#737373]"}
+                        />
+                      )}
+                    </button>
+                  </div>
                   <FormMessage className="text-[12px]" />
-                </div>
+                </>
               </FormControl>
             </FormItem>
           )}
