@@ -7,7 +7,6 @@ import type {
   CreateUserRequestBody,
   UpdateUserInfoRequestBody,
   UpdateSocialLinksRequestBody,
-  SocialLink,
 } from "./utils/types";
 
 dotenv.config();

@@ -15,6 +15,7 @@ if (process.env.NODE_ENV !== "production") {
     app.use((0, morgan_1.default)("dev"));
 }
 const corsOptions = {
+    // origin: "http://localhost:3000",
     origin: "https://mj-devlinks.vercel.app",
 };
 app.use((0, cors_1.default)(corsOptions));
@@ -36,7 +37,9 @@ app.post("/user", async (req, res) => {
     }
     catch (error) {
         console.error("Error creating user:", error);
-        res.status(500).json({ error: "Failed to create user" });
+        res
+            .status(500)
+            .json({ error: "Failed to create user", serverError: error });
     }
 });
 // Read Actions
@@ -60,7 +63,9 @@ app.get("/user/:userId", async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Failed to retrieve", test: error });
+        res
+            .status(500)
+            .json({ error: "Failed to retrieve user", serverError: error });
     }
 });
 // Update Actions
@@ -81,7 +86,10 @@ app.put("/user/:userId", async (req, res) => {
         res.status(200).json(user);
     }
     catch (error) {
-        res.status(500).json({ error: "Failed to update user" });
+        console.log(error);
+        res
+            .status(500)
+            .json({ error: "Failed to update user", serverError: error });
     }
 });
 app.put("/user/:userId/social-links", async (req, res) => {
@@ -103,7 +111,10 @@ app.put("/user/:userId/social-links", async (req, res) => {
         res.status(200).json(createdLinks);
     }
     catch (error) {
-        res.status(500).json({ error: "Failed to update social links" });
+        console.log(error);
+        res
+            .status(500)
+            .json({ error: "Failed to update social links", serverError: error });
     }
 });
 app.use((req, res) => {

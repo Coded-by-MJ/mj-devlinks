@@ -16,8 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LiaSpinnerSolid } from "react-icons/lia";
 import { Link } from "@tanstack/react-router";
-import { EyeOpenIcon } from "@radix-ui/react-icons";
-import { FaEyeSlash } from "react-icons/fa";
+
 import { useState } from "react";
 
 function LoginFormContainer({
@@ -25,7 +24,6 @@ function LoginFormContainer({
 }: {
   onSubmit(values: z.infer<typeof logInFormSchema>): Promise<void>;
 }) {
-  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof logInFormSchema>>({
     resolver: zodResolver(logInFormSchema),
     defaultValues: {
@@ -33,10 +31,6 @@ function LoginFormContainer({
       password: "",
     },
   });
-
-  const handleChangePassword = () => {
-    setShowPassword((prev) => !prev);
-  };
 
   return (
     <Form {...form}>
@@ -102,30 +96,12 @@ function LoginFormContainer({
                         <LockIcon />
 
                         <input
-                          placeholder="Enter your password"
                           {...field}
-                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter your password"
+                          type={"password"}
                           className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
                         />
                       </div>
-                      <button
-                        onClick={handleChangePassword}
-                        className="grid cursor-pointer grid-cols-1 grid-rows-1 justify-center items-center px-1"
-                      >
-                        {showPassword ? (
-                          <FaEyeSlash
-                            className={
-                              "col-span-full row-span-1 text-[#737373]"
-                            }
-                          />
-                        ) : (
-                          <EyeOpenIcon
-                            className={
-                              "col-span-full row-span-1 text-[#737373]"
-                            }
-                          />
-                        )}
-                      </button>
                     </div>
                     <FormMessage className="text-[12px]" />
                   </>

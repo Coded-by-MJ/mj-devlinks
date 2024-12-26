@@ -43,7 +43,7 @@ const populateUserState = async (userId: string, signOut: SignOut) => {
   const response = await queryClient.ensureQueryData({
     queryKey: ["User"],
     queryFn: () => getUser(userId),
-    retry: 2,
+    retry: 1,
   });
 
   if ("message" in response) {
