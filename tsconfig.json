@@ -10,6 +10,6 @@
     "strict": true, // Enable strict type-checking
     "esModuleInterop": true // Enable better interoperability with CommonJS
   },
-  "include": ["./server/*.ts"],
+  "include": ["server/**/*.ts"],
   "exclude": ["node_modules"]
 }
