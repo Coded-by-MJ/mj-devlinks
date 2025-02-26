@@ -7,7 +7,6 @@ import {
 } from "@tanstack/react-router";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { useAuth, useClerk } from "@clerk/clerk-react";
 
 import {
   Login,
@@ -19,12 +18,7 @@ import {
 } from "./pages";
 
 import Error from "./components/global/Error";
-import { getUser } from "./utils/actions";
 import { authLoader, userLoader } from "./utils/loaders";
-import { useEffect } from "react";
-import { SignOut } from "@clerk/types";
-import { setUser } from "./features/user/userSlice";
-import { store } from "./store";
 import { loader as shareLoader } from "./pages/SharePage";
 import {
   DisplaySkeleton,
@@ -39,68 +33,36 @@ const queryClient = new QueryClient({
   },
 });
 
-const populateUserState = async (userId: string, signOut: SignOut) => {
-  const response = await queryClient.ensureQueryData({
-    queryKey: ["User"],
-    queryFn: () => getUser(userId),
-    retry: 1,
-  });
-
-  if ("message" in response) {
-    signOut();
-    console.log(response.message);
-  } else {
-    store.dispatch(
-      setUser({
-        userId: response.clerk_id,
-        firstName: response.firstName,
-        lastName: response.lastName,
-        email: response.email,
-        image: response.image,
-        socialLinks: response.socialLinks,
-      })
-    );
-  }
-};
-
 function App() {
   const rootRoute = createRootRoute({});
-  const { isSignedIn, userId } = useAuth();
-  const { signOut } = useClerk();
-
-  useEffect(() => {
-    if (isSignedIn && userId) {
-      populateUserState(userId, signOut);
-    }
-  }, [isSignedIn, userId]);
 
   const loginRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/",
     component: Login,
-    loader: authLoader(isSignedIn, userId),
+    loader: authLoader,
   });
 
   const registerRoute = createRoute({
     getParentRoute: () => rootRoute,
-    path: "/register",
+    path: "/sign-up",
     component: Register,
-    loader: authLoader(isSignedIn, userId),
+    loader: authLoader,
   });
 
   const resetRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/reset",
     component: Reset,
-    loader: authLoader(isSignedIn, userId),
+    loader: authLoader,
   });
 
   const userRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/user",
     component: Layout,
-    loader: userLoader(isSignedIn, userId),
     pendingComponent: PageSkeleton,
+    loader: userLoader,
   });
 
   const linksRoute = createRoute({
@@ -111,13 +73,13 @@ function App() {
 
   const profileRoute = createRoute({
     getParentRoute: () => userRoute,
-    path: "/profile",
+    path: "profile",
     component: lazyRouteComponent(() => import("@/pages/ProfilePage")),
   });
 
   const previewRoute = createRoute({
     getParentRoute: () => userRoute,
-    path: "/preview",
+    path: "preview",
     component: PreviewPage,
     pendingComponent: DisplaySkeleton,
   });

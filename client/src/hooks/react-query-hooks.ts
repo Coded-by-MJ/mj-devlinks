@@ -1,11 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  createUser,
-  updateUserProfileInfo,
-  updateUserSocialLinks,
-} from "@/utils/actions";
+import { updateUserProfileInfo, updateUserSocialLinks } from "@/utils/actions";
 import { useAppSelector } from "./redux-hooks";
-import { useNavigate } from "@tanstack/react-router";
+
 import { getProfileUrl } from "@/utils/helpers";
 import { toast } from "./use-toast";
 
@@ -15,7 +11,7 @@ export const useSaveUserInfo = () => {
 
   const { mutate: saveUserProfile, isPending: isPendingInfo } = useMutation({
     mutationFn: () =>
-      updateUserProfileInfo(user.userId, {
+      updateUserProfileInfo({
         firstName: user.firstName,
         lastName: user.lastName,
         image: user.image,
@@ -55,7 +51,7 @@ export const useSaveUserSocialLinks = () => {
   const { mutate: saveUserSocialLinks, isPending: isPendingLinks } =
     useMutation({
       mutationFn: () =>
-        updateUserSocialLinks(user.userId, {
+        updateUserSocialLinks({
           socialLinks: user.socialLinks,
         }),
       onSuccess: () => {
@@ -67,23 +63,5 @@ export const useSaveUserSocialLinks = () => {
     saveUserSocialLinks,
     isPendingLinks,
     verifyUserLinks,
-  };
-};
-
-export const useCreateUser = () => {
-  const navigate = useNavigate();
-  const { mutateAsync: createAuthUser, isPending } = useMutation({
-    mutationFn: ({ userId, email }: { userId: string; email: string }) =>
-      createUser({ userId, email }),
-    onSuccess: () => {
-      navigate({
-        to: "/user",
-      });
-    },
-  });
-
-  return {
-    createAuthUser,
-    isPending,
   };
 };

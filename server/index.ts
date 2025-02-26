@@ -1,155 +1,35 @@
-import express, { Request, Response } from "express";
+import express, { urlencoded } from "express";
 import cors from "cors";
-import morgan from "morgan";
 import dotenv from "dotenv";
-import db from "./utils/db";
-import type {
-  CreateUserRequestBody,
-  UpdateUserInfoRequestBody,
-  UpdateSocialLinksRequestBody,
-} from "./utils/types";
+import cookieParser from "cookie-parser";
+
+import userRoutes from "./routes/userRoutes";
+import { errorHandler, notFound } from "./middleware/errorHandler";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV !== "production") {
-  app.use(morgan("dev"));
-}
-const corsOptions = {
-  // origin: "http://localhost:3000",
-  origin: "https://mj-devlinks.vercel.app",
-};
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    // origin: "http://localhost:3000",
+    origin: "https://mj-devlinks.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(urlencoded({ extended: false }));
+app.use(cookieParser());
 
-// app.get("/", (req, res) => {
-//   res.send("<h1>Hello From Server...</h1>");
-// });
-
-//Create Actions
-app.post(
-  "/user",
-  async (req: Request<{}, {}, CreateUserRequestBody>, res: Response) => {
-    const { userId, email } = req.body;
-
-    try {
-      const user = await db.user.create({
-        data: {
-          clerk_id: userId,
-          email,
-        },
-      });
-      res.status(201).json(user);
-    } catch (error) {
-      console.error("Error creating user:", error);
-      res
-        .status(500)
-        .json({ error: "Failed to create user", serverError: error });
-    }
-  }
-);
-
-// Read Actions
-
-app.get(
-  "/user/:userId",
-  async (req: Request<{ userId: string }, {}, {}>, res: Response) => {
-    const { userId } = req.params;
-
-    try {
-      const user = await db.user.findUnique({
-        where: {
-          clerk_id: userId,
-        },
-        include: {
-          socialLinks: true,
-        },
-      });
-
-      if (user) {
-        res.status(200).json(user);
-      } else {
-        res.status(404).json({ error: "User not found" });
-      }
-    } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({ error: "Failed to retrieve user", serverError: error });
-    }
-  }
-);
-
-// Update Actions
-app.put(
-  "/user/:userId",
-  async (
-    req: Request<{ userId: string }, {}, UpdateUserInfoRequestBody>,
-    res: Response
-  ) => {
-    const { userId } = req.params;
-    const { firstName, lastName, image } = req.body;
-
-    try {
-      const user = await db.user.update({
-        where: {
-          clerk_id: userId,
-        },
-        data: {
-          firstName,
-          lastName,
-          image,
-        },
-      });
-      res.status(200).json(user);
-    } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({ error: "Failed to update user", serverError: error });
-    }
-  }
-);
-
-app.put(
-  "/user/:userId/social-links",
-  async (
-    req: Request<{ userId: string }, {}, UpdateSocialLinksRequestBody>,
-    res: Response
-  ) => {
-    const { userId } = req.params;
-    const { socialLinks } = req.body;
-
-    try {
-      await db.socialLink.deleteMany({
-        where: {
-          clerk_id: userId,
-        },
-      });
-
-      const createdLinks = await db.socialLink.createMany({
-        data: socialLinks.map((link) => ({
-          url: link.url,
-          name: link.name,
-          clerk_id: userId,
-        })),
-      });
-
-      res.status(200).json(createdLinks);
-    } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({ error: "Failed to update social links", serverError: error });
-    }
-  }
-);
-
-app.use((req: Request, res: Response) => {
-  res.status(404).json({ error: "Route does not exist" });
+app.get("/", (req, res) => {
+  res.send("<h1>Hello From Server...</h1>");
 });
 
+//User Routes
+app.use("/api/users", userRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 const startApp = () => {
   try {
     app.listen(port, () => {

@@ -1,94 +1,182 @@
-import { isClerkAPIResponseError } from "@clerk/clerk-react/errors";
 import axios from "axios";
 import type {
-  CreateUserRequestBody,
+  AuthRequestBody,
   UpdateUserInfoRequestBody,
   UpdateSocialLinksRequestBody,
   GetUserResponseData,
+  AuthResponseBody,
 } from "@/utils/types";
 import { toast } from "@/hooks/use-toast";
+import Cookies from "js-cookie";
 
 export const renderError = (error: unknown): { message: string } => {
   console.log(error);
+  const message: string =
+    axios.isAxiosError(error) && error.response
+      ? error.response.data.message
+      : error instanceof Error
+      ? error.message
+      : String(error);
   return {
-    message: error instanceof Error ? error.message : "an error occurred",
+    message: message,
   };
 };
 
-export const renderAuthError = (error: unknown): { message: string } => {
-  console.log(error);
-  if (isClerkAPIResponseError(error)) {
-    const errorsArr = error.errors.map((error) => error.longMessage);
-    return {
-      message: errorsArr.join(", "),
-    };
-  } else {
-    return {
-      message: "there was an error",
-    };
+const fetchCookies = () => {
+  const token = Cookies.get("token");
+  const userId = Cookies.get("token");
+  if (!token || !userId) {
+    throw new Error("cookies not found");
   }
 };
 
-export const createUser = async ({ userId, email }: CreateUserRequestBody) => {
-  try {
-    await axios.post(`${import.meta.env.VITE_API_URL}/user`, {
-      userId,
-      email,
-    });
+export const createUser = async ({
+  email,
+  password,
+}: AuthRequestBody): Promise<AuthResponseBody> => {
+  const formData = new URLSearchParams();
+  formData.append("email", email);
+  formData.append("password", password);
 
-    toast({
-      description: "Sign up Successful ✅",
-    });
-  } catch (error) {
-    console.log(error);
-    const message: string =
-      axios.isAxiosError(error) && error.response
-        ? error.response.data.error
-        : "An error occurred while fetching user data.";
-
-    toast({
-      description: message,
-      variant: "destructive",
-    });
+  const { data } = await axios.post<AuthResponseBody>(
+    `${import.meta.env.VITE_API_URL}/api/users/sign-up`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+  const { token, id: userId } = data;
+  if (!token || !userId) {
+    throw new Error("Unable to create an account, please try again later");
   }
+  Cookies.set("token", token, {
+    sameSite: "strict",
+    secure: true,
+    expires: 7,
+  });
+  Cookies.set("userId", userId, {
+    sameSite: "strict",
+    secure: true,
+    expires: 7,
+  });
+
+  return data;
+};
+
+export const loginUser = async ({
+  email,
+  password,
+}: AuthRequestBody): Promise<AuthResponseBody> => {
+  const formData = new URLSearchParams();
+  formData.append("email", email);
+  formData.append("password", password);
+
+  const { data } = await axios.post<AuthResponseBody>(
+    `${import.meta.env.VITE_API_URL}/api/users/login`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  const { token, id: userId } = data;
+  if (!token || !userId) {
+    throw new Error("Unable to login your account, please try again later");
+  }
+  Cookies.set("token", token, {
+    sameSite: "strict",
+    secure: true,
+    expires: 7,
+  });
+  Cookies.set("userId", userId, {
+    sameSite: "strict",
+    secure: true,
+    expires: 7,
+  });
+  return data;
+};
+
+export const resetUserPassword = async ({
+  email,
+  password,
+}: AuthRequestBody): Promise<AuthResponseBody> => {
+  const formData = new URLSearchParams();
+  formData.append("email", email);
+  formData.append("password", password);
+
+  const { data } = await axios.post<AuthResponseBody>(
+    `${import.meta.env.VITE_API_URL}/api/users/reset`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  const { token, id: userId } = data;
+  if (!token || !userId) {
+    throw new Error("Unable to reset your password, please try again later");
+  }
+  Cookies.set("token", token, {
+    sameSite: "strict",
+    secure: true,
+    expires: 7,
+  });
+  Cookies.set("userId", userId, {
+    sameSite: "strict",
+    secure: true,
+    expires: 7,
+  });
+  return data;
 };
 
 export const getUser = async (
-  userId: string
+  optionalId?: string
 ): Promise<GetUserResponseData | { message: string }> => {
   try {
-    const res = await axios.get<GetUserResponseData>(
-      `${import.meta.env.VITE_API_URL}/user/${userId}`
+    const userId = Cookies.get("userId") || optionalId;
+    if (!userId) {
+      throw new Error("Please provide a user ID");
+    }
+    const { data } = await axios.get<GetUserResponseData>(
+      `${import.meta.env.VITE_API_URL}/api/users/${userId}`
     );
-    return res.data;
-  } catch (error) {
-    console.log(error);
-    const message: string =
-      axios.isAxiosError(error) && error.response
-        ? error.response.data.error
-        : "An error occurred while fetching user data.";
 
+    return data;
+  } catch (error) {
+    const { message } = renderError(error);
     toast({
       description: message,
       variant: "destructive",
     });
+
     return {
       message,
     };
   }
 };
 
-export const updateUserProfileInfo = async (
-  userId: string,
-  { firstName, lastName, image }: UpdateUserInfoRequestBody
-) => {
+export const updateUserProfileInfo = async ({
+  firstName,
+  lastName,
+  image,
+}: UpdateUserInfoRequestBody) => {
   try {
+    fetchCookies();
     const res = await axios.put(
-      `${import.meta.env.VITE_API_URL}/user/${userId}`,
+      `${import.meta.env.VITE_API_URL}/api/users`,
       {
         firstName,
         lastName,
         image,
+      },
+      {
+        withCredentials: true,
       }
     );
 
@@ -97,11 +185,7 @@ export const updateUserProfileInfo = async (
     });
     return res.data;
   } catch (error) {
-    console.log(error);
-    const message: string =
-      axios.isAxiosError(error) && error.response
-        ? error.response.data.error
-        : "An error occurred while updating user info.";
+    const { message } = renderError(error);
 
     toast({
       description: message,
@@ -110,28 +194,26 @@ export const updateUserProfileInfo = async (
   }
 };
 
-export const updateUserSocialLinks = async (
-  userId: string,
-  { socialLinks }: UpdateSocialLinksRequestBody
-) => {
+export const updateUserSocialLinks = async ({
+  socialLinks,
+}: UpdateSocialLinksRequestBody) => {
   try {
-    const res = await axios.put(
-      `${import.meta.env.VITE_API_URL}/user/${userId}/social-links`,
+    fetchCookies();
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/users/social-links`,
       {
         socialLinks,
+      },
+      {
+        withCredentials: true,
       }
     );
-
     toast({
       description: "Links Updated✅",
     });
     return res.data;
   } catch (error) {
-    console.log(error);
-    const message: string =
-      axios.isAxiosError(error) && error.response
-        ? error.response.data.error
-        : "An error occurred while update user social links.";
+    const { message } = renderError(error);
 
     toast({
       description: message,

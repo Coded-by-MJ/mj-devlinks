@@ -5,10 +5,12 @@ import z from "zod";
 import { logInFormSchema } from "@/utils/schema";
 import LoginFormContainer from "@/components/auth/LoginFormContainer";
 import { toast } from "@/hooks/use-toast";
-import { renderAuthError } from "@/utils/actions";
+import { loginUser, renderError } from "@/utils/actions";
 import { useSignIn } from "@clerk/clerk-react";
 import { useNavigate } from "@tanstack/react-router";
 import { AuthFormProps } from "@/utils/types";
+import { setUser } from "@/features/user/userSlice";
+import { useAppDispatch } from "@/hooks/redux-hooks";
 
 const authFormProps: AuthFormProps = {
   heading: "Login",
@@ -20,33 +22,32 @@ const authFormProps: AuthFormProps = {
 };
 
 function Login() {
-  const { isLoaded, setActive, signIn } = useSignIn();
-
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   const handleLogin = async (values: z.infer<typeof logInFormSchema>) => {
-    if (!isLoaded) return;
-
+    const { password } = values;
     try {
-      const signInAttempt = await signIn.create({
-        identifier: values.email,
-        password: values.password,
+      const { id, firstName, lastName, email, image, socialLinks } =
+        await loginUser({ email: values.email.toLowerCase(), password });
+      dispatch(
+        setUser({
+          userId: id,
+          firstName,
+          lastName,
+          email,
+          image,
+          socialLinks,
+        })
+      );
+
+      navigate({
+        to: `/user`,
       });
-
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-
-        navigate({
-          to: `/user`,
-        });
-        toast({
-          description: `Welcome Back 🤗`,
-        });
-      } else {
-        console.error(JSON.stringify(signInAttempt, null, 2));
-      }
+      toast({
+        description: `Welcome Back 🤗`,
+      });
     } catch (error) {
-      const errMsg = renderAuthError(error);
+      const errMsg = renderError(error);
       toast({
         description: errMsg.message,
         variant: "destructive",

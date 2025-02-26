@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2017",
+    // ECMAScript target version
+    "outDir": "./server/dist", // Output directory for compiled files relative to 'server'
+    "rootDir": "./server", // Root directory is the 'server' folder itself
+    "strict": true, // Enable strict type-checking
+    "esModuleInterop": true // Enable better interoperability with CommonJS
+  },
+  "include": ["./server/*.ts", "server/middleware/errorHandler.ts"],
+  "exclude": ["node_modules"]
+}

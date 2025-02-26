@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LiaSpinnerSolid } from "react-icons/lia";
 import { Link } from "@tanstack/react-router";
+import { EmailInput, PasswordInput } from "../global/Inputs";
 
 function LoginFormContainer({
   onSubmit,
@@ -30,86 +31,23 @@ function LoginFormContainer({
     },
   });
 
+  const { errors } = form.formState;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel
-                className={cn(
-                  "text-[12px] text-main-gray",
-                  form.formState.errors.email && "text-red-500"
-                )}
-              >
-                Email Address
-              </FormLabel>
-              <FormControl>
-                <div
-                  className={cn(
-                    "flex gap-3 items-center border-main-gray border w-full focus-visible:shadow-main-light focus-visible:shadow-lg focus-visible:ring-main-shade h-[48px] p-3 rounded-[8px]",
-                    form.formState.errors.email &&
-                      "border-red-500 focus-visible:shadow-red-200 focus-visible:shadow-md focus-visible:ring-red-200"
-                  )}
-                >
-                  <EmailIcon />
-
-                  <input
-                    placeholder="e.g. alex@email.com"
-                    {...field}
-                    className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
-                  />
-                  <FormMessage className="text-[12px]" />
-                </div>
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        <EmailInput control={form.control} isError={errors.email} />
         <>
-          <FormField
+          <PasswordInput
             control={form.control}
-            name={"password"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  className={cn(
-                    "text-[12px] text-main-gray",
-                    form.formState.errors.password && "text-red-500"
-                  )}
-                >
-                  Password
-                </FormLabel>
-                <FormControl>
-                  <>
-                    <div
-                      className={cn(
-                        "flex gap-3 items-center justify-between border-main-gray border w-full focus-visible:shadow-main-light focus-visible:shadow-lg focus-visible:ring-main-shade h-[48px] p-3 rounded-[8px]",
-                        form.formState.errors.password &&
-                          "border-red-500 focus-visible:shadow-red-200 focus-visible:shadow-md focus-visible:ring-red-200"
-                      )}
-                    >
-                      <div className="flex gap-3 items-center flex-grow">
-                        <LockIcon />
-
-                        <input
-                          {...field}
-                          placeholder="Enter your password"
-                          type={"password"}
-                          className="flex-1 focus:outline-none focus:border-none text-base text-main-gray"
-                        />
-                      </div>
-                    </div>
-                    <FormMessage className="text-[12px]" />
-                  </>
-                </FormControl>
-              </FormItem>
-            )}
+            isError={errors.password}
+            format="password"
           />
+
           <Button
             asChild
             variant={"link"}
+            type="button"
             className="text-main !my-0 w-[128px] ml-auto flex font-light px-0 text-[12px]"
           >
             <Link to="reset">Forgot your password?</Link>

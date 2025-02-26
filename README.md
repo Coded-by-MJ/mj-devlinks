@@ -23,7 +23,8 @@ DevLinks is a full-stack web application that allows users to manage and share l
 - Express
 - Supabase
 - Prisma
-- Clerkjs
+- JWT
+- bcrypt
 - [React](https://reactjs.org/) - JS library
 
 ## Live Link

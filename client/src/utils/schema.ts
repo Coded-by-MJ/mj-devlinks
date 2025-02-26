@@ -3,14 +3,14 @@ import { z } from "zod";
 export const logInFormSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(8, {
-    message: "Please check again",
+    message: "8 characters minimum",
   }),
 });
 
 export const registerFormSchema = z
   .object({
     email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(8, { message: "Please check again" }),
+    password: z.string().min(8, { message: "8 characters minimum" }),
     confirmPassword: z.string(),
   })
   .superRefine((data, ctx) => {
@@ -23,12 +23,6 @@ export const registerFormSchema = z
     }
   });
 
-export const otpFormSchema = z.object({
-  pin: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
-  }),
-});
-
 export const userFormSchema = z.object({
   firstName: z.string().min(1, {
     message: "Can't be empty",
@@ -38,17 +32,5 @@ export const userFormSchema = z.object({
   }),
   email: z.string().email({
     message: "Invalid email address",
-  }),
-});
-
-export const emailSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-});
-export const resetSchema = z.object({
-  password: z.string().min(8, {
-    message: "Please check again",
-  }),
-  pin: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
   }),
 });

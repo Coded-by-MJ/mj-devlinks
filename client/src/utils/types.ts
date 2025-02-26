@@ -34,9 +34,18 @@ export type UserInfoField = {
   value: string;
 };
 
-export interface CreateUserRequestBody {
-  userId: string;
+export interface AuthRequestBody {
+  password: string;
   email: string;
+}
+export interface AuthResponseBody {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  socialLinks: SocialLink[];
+  token: string;
 }
 
 export interface UpdateUserInfoRequestBody {
@@ -51,20 +60,11 @@ export interface UpdateSocialLinksRequestBody {
 
 export interface GetUserResponseData {
   id: string;
-  clerk_id: string;
-  firstName: string;
   lastName: string;
+  firstName: string;
   email: string;
   image: string;
-  socialLinks: UserSocialLinkResponseData[];
-}
-
-interface UserSocialLinkResponseData {
-  id: string;
-  url: string;
-  name: string;
-  clerk_id: string;
-  user: GetUserResponseData;
+  socialLinks: SocialLink[];
 }
 
 export type SaveButtonProps =

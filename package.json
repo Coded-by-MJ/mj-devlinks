@@ -1,0 +1,41 @@
+{
+  "name": "devlinks",
+  "version": "1.0.0",
+  "description": "DevLinks is a full-stack web application that allows users to manage and share links effortlessly. With intuitive features such as link CRUD operations, drag-and-drop functionality, and real-time link previews, users can organize their links seamlessly. The application also enables users to set up their profiles, including profile pictures.",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node server/dist/index.js",
+    "server": "nodemon",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "postinstall": "prisma generate",
+    "prisma.init": "npx prisma init",
+    "prisma.generate": "npx prisma generate",
+    "prisma.studio": "npx prisma studio",
+    "prisma.push": "npx prisma db push"
+  },
+  "author": "Miracle Ibharokhonre",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/morgan": "^1.9.9",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

@@ -29,15 +29,12 @@ function Navbar() {
 }
 
 export const PreviewNavbar = () => {
-  const { userId } = useLoaderData({
-    from: "/user",
-  });
   const user = useAppSelector((store) => store.user);
 
   const shareData = {
     title: "Devlinks",
     text: `${user.firstName}'s Devlinks Profile`,
-    url: `${import.meta.env.VITE_WEBSITE_URL}/share/${userId}`,
+    url: `${import.meta.env.VITE_WEBSITE_URL}/share/${user.userId}`,
   };
 
   const handleShare = async () => {
