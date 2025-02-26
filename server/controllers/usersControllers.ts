@@ -10,7 +10,7 @@ import {
 } from "../utils/types";
 
 const createUserInDB = asyncHandler(
-  async (req: Request<{}, {}, AuthInfoRequest>, res: Response) => {
+  async (req: AuthInfoRequest, res: Response) => {
     const { email, password } = req.body;
     if (!email || !password) {
       res.status(400);
@@ -54,7 +54,7 @@ const createUserInDB = asyncHandler(
 );
 
 const resetUserPassword = asyncHandler(
-  async (req: Request<{}, {}, AuthInfoRequest>, res: Response) => {
+  async (req: AuthInfoRequest, res: Response) => {
     const { email, password } = req.body;
     if (!email || !password) {
       res.status(400);
@@ -99,33 +99,31 @@ const resetUserPassword = asyncHandler(
   }
 );
 
-const loginUser = asyncHandler(
-  async (req: Request<{}, {}, AuthInfoRequest>, res: Response) => {
-    const { email, password } = req.body;
-    const user = await db.user.findUnique({
-      where: {
-        email,
-      },
-      include: {
-        socialLinks: true,
-      },
+const loginUser = asyncHandler(async (req: AuthInfoRequest, res: Response) => {
+  const { email, password } = req.body;
+  const user = await db.user.findUnique({
+    where: {
+      email,
+    },
+    include: {
+      socialLinks: true,
+    },
+  });
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.status(200).json({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      image: user.image,
+      email: user.email,
+      socialLinks: user.socialLinks,
+      token: generateToken(user.id),
     });
-    if (user && (await bcrypt.compare(password, user.password))) {
-      res.status(200).json({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        image: user.image,
-        email: user.email,
-        socialLinks: user.socialLinks,
-        token: generateToken(user.id),
-      });
-    } else {
-      res.status(401);
-      throw new Error("Invalid Credentials");
-    }
+  } else {
+    res.status(401);
+    throw new Error("Invalid Credentials");
   }
-);
+});
 
 const generateToken = (id: string) => {
   const secret = process.env.JWT_SECRET!;
@@ -134,35 +132,33 @@ const generateToken = (id: string) => {
   });
 };
 
-const getUserFromDB = asyncHandler(
-  async (req: Request<{ id: string }, {}, {}>, res: Response) => {
-    const userId: string = req.params.id;
+const getUserFromDB = asyncHandler(async (req: Request, res: Response) => {
+  const userId: string = req.params.id;
 
-    const user = await db.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        id: true,
-        lastName: true,
-        firstName: true,
-        email: true,
-        image: true,
-        socialLinks: true,
-      },
-    });
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      lastName: true,
+      firstName: true,
+      email: true,
+      image: true,
+      socialLinks: true,
+    },
+  });
 
-    if (user) {
-      res.status(200).json(user);
-    } else {
-      res.status(404);
-      throw new Error("User not found in Database");
-    }
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found in Database");
   }
-);
+});
 
 const updateUserInDB = asyncHandler(
-  async (req: Request<{}, {}, UpdateUserInfoRequest>, res: Response) => {
+  async (req: UpdateUserInfoRequest, res: Response) => {
     const userId: string = req.cookies.userId;
     const { firstName, lastName, image } = req.body;
 
@@ -181,7 +177,7 @@ const updateUserInDB = asyncHandler(
 );
 
 const updateUserSocialLinksInDB = asyncHandler(
-  async (req: Request<{}, {}, UpdateSocialLinksRequest>, res: Response) => {
+  async (req: UpdateSocialLinksRequest, res: Response) => {
     const userId: string = req.cookies.userId;
     const { socialLinks } = req.body;
 
