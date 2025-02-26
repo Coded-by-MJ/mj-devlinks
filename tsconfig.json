@@ -4,7 +4,7 @@
     "moduleResolution": "NodeNext",
     "target": "ES2020",
     // ECMAScript target version
-
+    "types": ["node"],
     "outDir": "./server/dist", // Output directory for compiled files relative to 'server'
     "rootDir": "./server", // Root directory is the 'server' folder itself
     "strict": true, // Enable strict type-checking
