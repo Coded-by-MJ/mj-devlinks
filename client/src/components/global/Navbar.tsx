@@ -1,6 +1,6 @@
 import UserLinks from "./UserLinks";
 import Logo from "./Logo";
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import SignOutLink from "../auth/SignOutLink";
 import { IoMdEye } from "react-icons/io";
 import { Button } from "@/components/ui/button";

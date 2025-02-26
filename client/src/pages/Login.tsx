@@ -6,7 +6,7 @@ import { logInFormSchema } from "@/utils/schema";
 import LoginFormContainer from "@/components/auth/LoginFormContainer";
 import { toast } from "@/hooks/use-toast";
 import { loginUser, renderError } from "@/utils/actions";
-import { useSignIn } from "@clerk/clerk-react";
+
 import { useNavigate } from "@tanstack/react-router";
 import { AuthFormProps } from "@/utils/types";
 import { setUser } from "@/features/user/userSlice";

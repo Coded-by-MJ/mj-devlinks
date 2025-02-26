@@ -1,4 +1,4 @@
-import { Control, FieldError } from "react-hook-form";
+import { FieldError } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -15,10 +15,7 @@ function EmailInput({
   control,
   isError,
 }: {
-  control:
-    | Control<{ email: string; password: string; confirmPassword: string }, any>
-    | Control<{ email: string; password: string }, any>;
-
+  control: any;
   isError: FieldError | undefined;
 }) {
   return (
@@ -66,10 +63,7 @@ function PasswordInput({
   isError,
   format,
 }: {
-  control:
-    | Control<{ email: string; password: string; confirmPassword: string }, any>
-    | Control<{ email: string; password: string }, any>;
-
+  control: any;
   isError: FieldError | undefined;
   format: "confirm" | "password";
 }) {
