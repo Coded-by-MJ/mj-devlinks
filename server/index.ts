@@ -10,10 +10,23 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://mj-devlinks.vercel.app",
+  "https://devlinks.miracleibharokhonre.com/"
+];
+
 app.use(
   cors({
-    // origin: "http://localhost:3000",
-    origin: "https://mj-devlinks.vercel.app",
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
