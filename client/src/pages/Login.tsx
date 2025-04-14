@@ -16,7 +16,7 @@ const authFormProps: AuthFormProps = {
   heading: "Login",
   desc: "Add your details below to get back into the app",
   type: "login",
-  link: "/register",
+  link: "/sign-up",
   linkText: "Create account",
   suggestion: "Don’t have an account?",
 };
