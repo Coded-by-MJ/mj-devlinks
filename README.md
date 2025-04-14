@@ -29,7 +29,7 @@ DevLinks is a full-stack web application that allows users to manage and share l
 
 ## Live Link
 
-- [DevLinks](https://mj-devlinks.vercel.app/)
+- [DevLinks](https://devlinks.miracleibharokhonre.com/)
 
 ## Author
 
