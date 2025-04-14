@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server/dist/index.js",
     "server": "nodemon",
+    "build": "tsc --project tsconfig.json",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "postinstall": "prisma generate",
